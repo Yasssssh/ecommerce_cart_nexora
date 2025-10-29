@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Cartcontext } from "./CartContextCore";
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/cart";
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 export const CartcontextProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
@@ -11,7 +11,7 @@ export const CartcontextProvider = ({ children }) => {
   useEffect(() => {
     const fetchInitialCart = async () => {
       try {
-        const res = await axios.get(`${API_URL}/getcart`);
+        const res = await axios.get("/api/cart/getcart");
         if (res.data.success) {
           setCart(res.data.cart);
           setTotalPrice(res.data.total);
@@ -26,7 +26,7 @@ export const CartcontextProvider = ({ children }) => {
 
   const AddProduct = async (productname, productprice) => {
     try {
-      const res = await axios.post(`${API_URL}/addtocart`, {
+      const res = await axios.post("/api/cart/addtocart", {
         name: productname,
         price: productprice,
       });
@@ -44,9 +44,7 @@ export const CartcontextProvider = ({ children }) => {
 
   const RemoveProduct = async (productName) => {
     try {
-      const res = await axios.delete(
-        `${API_URL}/removefromcart/${productName}`
-      );
+      const res = await axios.delete(`/api/cart/removefromcart/${productName}`);
 
       if (res.data.success) {
         setCart(res.data.cart);
@@ -61,7 +59,7 @@ export const CartcontextProvider = ({ children }) => {
 
   const UpdateQuantity = async (productName, action) => {
     try {
-      const res = await axios.put(`${API_URL}/updatequantity`, {
+      const res = await axios.put("/api/cart/updatequantity", {
         name: productName,
         action: action,
       });
@@ -79,7 +77,7 @@ export const CartcontextProvider = ({ children }) => {
 
   const ClearCart = async () => {
     try {
-      const res = await axios.delete(`${API_URL}/clearcart`);
+      const res = await axios.delete("/api/cart/clearcart");
 
       if (res.data.success) {
         setCart(res.data.cart);
@@ -94,10 +92,7 @@ export const CartcontextProvider = ({ children }) => {
 
   const CheckOut = async (details) => {
     try {
-      const res = await axios.post(
-        "http://localhost:3000/api/checkout",
-        details
-      );
+      const res = await axios.post("/api/checkout", details);
 
       if (res.data.success) {
         return { success: true };

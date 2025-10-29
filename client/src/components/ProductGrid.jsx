@@ -3,13 +3,15 @@ import ProductCard from "./ProductCard";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+const BASEURL = import.meta.env.VITE_BASE_URL;
+
 const ProductGrid = () => {
   const [productsstate, setproducts] = useState([]);
 
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/products/");
+        const response = await axios.get(`${BASEURL}/api/products/`);
 
         const serverData = response.data;
 
